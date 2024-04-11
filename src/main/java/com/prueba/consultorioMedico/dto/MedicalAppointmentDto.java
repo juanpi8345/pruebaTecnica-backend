@@ -10,6 +10,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Builder
 public class MedicalAppointmentDto {
+    Long medicalAppointmentId;
     String professionalDni;
     String professionalName;
     String professionalLastname;

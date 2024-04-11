@@ -1,6 +1,7 @@
 package com.prueba.consultorioMedico.util;
 
 import com.prueba.consultorioMedico.exception.OutOfServiceException;
+import com.prueba.consultorioMedico.exception.OutOfTimeException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -24,6 +25,14 @@ public class DateValidation {
                                                 LocalTime professionalEndTime) throws OutOfServiceException{
         if(appointmentTime.isBefore( professionalStartTime) || appointmentTime.isAfter(professionalEndTime))
             throw new OutOfServiceException("Error, el profesional no esta disponible a las "+ appointmentTime+ "hs");
+    }
+
+    public static void validateAbleToModifyOrDelete(LocalDateTime appointmentTime) throws OutOfTimeException{
+        LocalDateTime now = LocalDateTime.now();
+        //Si el turno es antes que el dia y horario actual + 1 hora.
+        if(appointmentTime.isBefore(now.plusHours(1)) ){
+            throw new OutOfTimeException("Error no se puede modificar o eliminar el turno dado a que falta menos de una hora para el mismo");
+        }
     }
 
 

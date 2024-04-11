@@ -23,7 +23,7 @@ import java.util.List;
 public class MedicalAppointmentService implements IMedicalAppointmentService {
 
     @Autowired
-    private IMedicalAppointmentRepository medicalRepository;
+    private IMedicalAppointmentRepository medicalAppointmentRepository;
 
     @Autowired
     private IProfessionalRepository professionalRepository;
@@ -36,30 +36,30 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
 
     @Override
     public List<MedicalAppointmentDto> findAllByPatient(Patient patient) {
-        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAllByPatient(patient);
+        List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByPatient(patient);
         return formatData(medicalAppointmentList);
     }
 
     @Override
     public List<MedicalAppointmentDto> findAllByProfessional(Professional professional) {
-        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAllByProfessional(professional);
+        List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByProfessional(professional);
         return formatData(medicalAppointmentList);
     }
 
     @Override
     public List<MedicalAppointmentDto> findAllBySpeciality(Speciality speciality) {
-        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAllBySpeciality(speciality);
+        List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllBySpeciality(speciality);
         return formatData(medicalAppointmentList);
     }
 
     @Override
     public List<MedicalAppointmentDto> findAll() {
-        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAll();
+        List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAll();
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public void add(MedicalAppointmentDto medicalAppointmentDto) throws OutOfServiceException{
+    public void add(MedicalAppointmentDto medicalAppointmentDto){
         //Verificar si la fecha no es domingo
         DateValidation.validateDayOfWeek(medicalAppointmentDto.getDate());
         //Verificar si el horario no esta fuera de servicio
@@ -80,17 +80,24 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
         patientRepository.save(patient);
         professional.getMedicalAppointments().add(medicalAppointment);
         professionalRepository.save(professional);
-        medicalRepository.save(medicalAppointment);
+        medicalAppointmentRepository.save(medicalAppointment);
     }
 
     @Override
     public void deleteAppointment(Long appointmentId) {
-
+        MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(appointmentId).orElseThrow();
+        //Verificar si el turno se puede eliminar en base a la fecha y hora
+        DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
+        medicalAppointmentRepository.deleteById(appointmentId);
     }
 
     @Override
-    public void updateAppointment(MedicalAppointmentDto medicalAppointmentDto) {
-
+    public void updateAppointment(Long appointmentId,LocalDateTime newDate) {
+        MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(appointmentId).orElseThrow();
+        //Verificar si el turno se puede modificar
+        DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
+        medicalAppointment.setAppointmentDate(newDate);
+        medicalAppointmentRepository.save(medicalAppointment);
     }
 
     //Aux
