@@ -1,5 +1,6 @@
 package com.prueba.consultorioMedico.service.impl;
 
+import com.prueba.consultorioMedico.dto.MedicalAppointmentDto;
 import com.prueba.consultorioMedico.model.MedicalAppointment;
 import com.prueba.consultorioMedico.model.Patient;
 import com.prueba.consultorioMedico.model.Professional;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,27 +21,31 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     private IMedicalAppointmentRepository medicalRepository;
 
     @Override
-    public List<MedicalAppointment> findAllByPatient(Patient patient) {
-        return medicalRepository.findAllByPatient(patient);
+    public List<MedicalAppointmentDto> findAllByPatient(Patient patient) {
+        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAllByPatient(patient);
+        return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<MedicalAppointment> findAllByProfessional(Professional professional) {
-        return medicalRepository.findAllByProfessional(professional);
+    public List<MedicalAppointmentDto> findAllByProfessional(Professional professional) {
+        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAllByProfessional(professional);
+        return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<MedicalAppointment> findAllBySpeciality(Speciality speciality) {
-        return medicalRepository.findAllBySpeciality(speciality);
+    public List<MedicalAppointmentDto> findAllBySpeciality(Speciality speciality) {
+        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAllBySpeciality(speciality);
+        return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<MedicalAppointment> findAll() {
-        return medicalRepository.findAll();
+    public List<MedicalAppointmentDto> findAll() {
+        List<MedicalAppointment> medicalAppointmentList = medicalRepository.findAll();
+        return formatData(medicalAppointmentList);
     }
 
     @Override
-    public void addAppointment(String patientDni, String professionalDni, String consultingRoomName, LocalDateTime date) {
+    public void add(MedicalAppointmentDto medicalAppointmentDto) {
 
     }
 
@@ -49,7 +55,27 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     }
 
     @Override
-    public void updateAppointment(Long appointmentId, String patientDni, String professionalDni, String consultingRoomName, LocalDateTime date) {
+    public void updateAppointment(MedicalAppointmentDto medicalAppointmentDto) {
 
+    }
+
+    //Aux
+    public List<MedicalAppointmentDto> formatData(List<MedicalAppointment> medicalAppointmentList){
+        List<MedicalAppointmentDto> medicalAppointmentDtoList = new ArrayList<>();
+
+        medicalAppointmentList.forEach((medicalAppointment -> {
+            MedicalAppointmentDto dto = MedicalAppointmentDto.builder()
+                    .professionalDni(medicalAppointment.getProfessional().getDni())
+                    .professionalName(medicalAppointment.getProfessional().getName())
+                    .professionalLastname(medicalAppointment.getProfessional().getLastname())
+                    .patientDni(medicalAppointment.getPatient().getDni())
+                    .patientName(medicalAppointment.getPatient().getName())
+                    .patientLastName(medicalAppointment.getPatient().getLastname())
+                    .consultingRoomName(medicalAppointment.getConsultingRoom().getConsultingRoomName())
+                    .date(medicalAppointment.getAppointmentDate())
+                    .build();
+            medicalAppointmentDtoList.add(dto);
+        }));
+        return medicalAppointmentDtoList;
     }
 }
