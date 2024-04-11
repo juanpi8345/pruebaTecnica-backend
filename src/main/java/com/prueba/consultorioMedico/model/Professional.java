@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,5 +30,7 @@ public class Professional {
     private List<Speciality> specialityList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "professional")
     private List<MedicalAppointment> medicalAppointment;
+    private LocalTime start;
+    private LocalTime end;
 
 }
