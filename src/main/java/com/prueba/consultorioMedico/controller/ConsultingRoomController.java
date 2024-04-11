@@ -27,7 +27,7 @@ public class ConsultingRoomController {
     @PostMapping("/add")
     public ResponseEntity<Message> addConsultingRoom(@RequestBody ConsultingRoom consultingRoom){
         consultingRoomService.add(consultingRoom);
-        Message message = Message.builder().status(HttpStatus.OK).message("Edilicio agregado correctamente").build();
+        Message message = Message.builder().status(HttpStatus.OK).message("Edilicio guardado correctamente").build();
         return ResponseEntity.ok(message);
     }
 }

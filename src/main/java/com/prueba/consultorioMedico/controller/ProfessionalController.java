@@ -32,7 +32,7 @@ public class ProfessionalController {
                         .lastname(professionalDto.getLastname()).dni(professionalDto.getDni())
                         .start(professionalDto.getStart()).end(professionalDto.getEnd()).build();
         professionalService.add(professional);
-        Message message = Message.builder().status(HttpStatus.OK).message("Profesional agregado correctamente").build();
+        Message message = Message.builder().status(HttpStatus.OK).message("Profesional guardado correctamente").build();
         return ResponseEntity.ok(message);
     }
 }

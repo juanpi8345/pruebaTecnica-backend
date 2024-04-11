@@ -23,8 +23,7 @@ public class PatientService implements IPatientService {
 
     @Override
     public void add(Patient patient) {
-        if(patient.getMedicalAppointments() == null)
-            patient.setMedicalAppointments(new ArrayList<MedicalAppointment>());
+        patient.setMedicalAppointments(new ArrayList<MedicalAppointment>());
         patientRepository.save(patient);
     }
 }
