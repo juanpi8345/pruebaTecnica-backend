@@ -17,7 +17,7 @@ public class Speciality {
     @Id
     @Column(name = "speciality_name")
     private String name;
-    //Json ignore para evitar un bucle
+    //JsonIgnore para evitar un bucle
     @JsonIgnore
     @ManyToMany(mappedBy = "specialityList")
     private List<Professional> professionalList = new ArrayList<>();

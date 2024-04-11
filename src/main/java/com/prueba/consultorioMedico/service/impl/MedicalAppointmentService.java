@@ -1,21 +1,17 @@
 package com.prueba.consultorioMedico.service.impl;
 
-import com.prueba.consultorioMedico.dto.MedicalAppointmentDto;
-import com.prueba.consultorioMedico.exception.OutOfServiceException;
+import com.prueba.consultorioMedico.dto.FullMedicalAppointmentDto;
 import com.prueba.consultorioMedico.model.*;
 import com.prueba.consultorioMedico.repository.IConsultingRoomRepository;
 import com.prueba.consultorioMedico.repository.IMedicalAppointmentRepository;
 import com.prueba.consultorioMedico.repository.IPatientRepository;
 import com.prueba.consultorioMedico.repository.IProfessionalRepository;
 import com.prueba.consultorioMedico.service.IMedicalAppointmentService;
-import com.prueba.consultorioMedico.service.IPatientService;
 import com.prueba.consultorioMedico.util.DateValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,31 +31,31 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     private IPatientRepository patientRepository;
 
     @Override
-    public List<MedicalAppointmentDto> findAllByPatient(Patient patient) {
+    public List<FullMedicalAppointmentDto> findAllByPatient(Patient patient) {
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByPatient(patient);
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<MedicalAppointmentDto> findAllByProfessional(Professional professional) {
+    public List<FullMedicalAppointmentDto> findAllByProfessional(Professional professional) {
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByProfessional(professional);
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<MedicalAppointmentDto> findAllBySpeciality(Speciality speciality) {
+    public List<FullMedicalAppointmentDto> findAllBySpeciality(Speciality speciality) {
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllBySpeciality(speciality);
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<MedicalAppointmentDto> findAll() {
+    public List<FullMedicalAppointmentDto> findAll() {
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAll();
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public void add(MedicalAppointmentDto medicalAppointmentDto){
+    public void add(FullMedicalAppointmentDto medicalAppointmentDto){
         //Verificar si la fecha no es domingo
         DateValidation.validateDayOfWeek(medicalAppointmentDto.getDate());
         //Verificar si el horario no esta fuera de servicio
@@ -101,19 +97,17 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     }
 
     //Aux
-    public List<MedicalAppointmentDto> formatData(List<MedicalAppointment> medicalAppointmentList){
-        List<MedicalAppointmentDto> medicalAppointmentDtoList = new ArrayList<>();
+    public List<FullMedicalAppointmentDto> formatData(List<MedicalAppointment> medicalAppointmentList){
+        List<FullMedicalAppointmentDto> medicalAppointmentDtoList = new ArrayList<>();
 
         medicalAppointmentList.forEach((medicalAppointment -> {
-            MedicalAppointmentDto dto = MedicalAppointmentDto.builder()
+            FullMedicalAppointmentDto dto = FullMedicalAppointmentDto.builder()
                     .professionalDni(medicalAppointment.getProfessional().getDni())
                     .professionalName(medicalAppointment.getProfessional().getName())
                     .professionalLastname(medicalAppointment.getProfessional().getLastname())
-                    .professionalTimeStart(medicalAppointment.getProfessional().getStart())
-                    .professionalTimeEnd(medicalAppointment.getProfessional().getEnd())
                     .patientDni(medicalAppointment.getPatient().getDni())
                     .patientName(medicalAppointment.getPatient().getName())
-                    .patientLastName(medicalAppointment.getPatient().getLastname())
+                    .patientLastname(medicalAppointment.getPatient().getLastname())
                     .consultingRoomName(medicalAppointment.getConsultingRoom().getConsultingRoomName())
                     .date(medicalAppointment.getAppointmentDate())
                     .build();
