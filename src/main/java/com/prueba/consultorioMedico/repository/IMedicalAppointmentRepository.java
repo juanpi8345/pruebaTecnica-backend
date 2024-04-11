@@ -10,10 +10,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface IMedicalAppointment extends JpaRepository<MedicalAppointment,Long> {
+public interface IMedicalAppointmentRepository extends JpaRepository<MedicalAppointment,Long> {
     List<MedicalAppointment> findAllByPatient(Patient patient);
     List<MedicalAppointment> findAllByProfessional(Professional professional);
     @Query("SELECT ma FROM MedicalAppointment ma WHERE :speciality MEMBER OF ma.professional.specialityList")
