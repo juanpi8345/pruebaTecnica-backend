@@ -3,6 +3,7 @@ package com.prueba.consultorioMedico.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter @Setter
 @AllArgsConstructor
@@ -17,4 +18,6 @@ public class MedicalAppointmentDto {
     String patientLastName;
     String consultingRoomName;
     LocalDateTime date;
+    LocalTime professionalTimeStart;
+    LocalTime professionalTimeEnd;
 }

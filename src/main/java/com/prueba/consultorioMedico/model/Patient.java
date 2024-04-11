@@ -21,5 +21,5 @@ public class Patient {
     private String name;
     private String lastname;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
-    private List<MedicalAppointment> medicalAppointment;
+    private List<MedicalAppointment> medicalAppointments;
 }

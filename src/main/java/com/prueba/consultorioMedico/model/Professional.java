@@ -29,7 +29,7 @@ public class Professional {
     )
     private List<Speciality> specialityList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "professional")
-    private List<MedicalAppointment> medicalAppointment;
+    private List<MedicalAppointment> medicalAppointments;
     private LocalTime start;
     private LocalTime end;
 
