@@ -1,11 +1,9 @@
 package com.prueba.consultorioMedico.service.impl;
 
 import com.prueba.consultorioMedico.dto.FullMedicalAppointmentDto;
+import com.prueba.consultorioMedico.dto.SimpleMedicalAppointmentDto;
 import com.prueba.consultorioMedico.model.*;
-import com.prueba.consultorioMedico.repository.IConsultingRoomRepository;
-import com.prueba.consultorioMedico.repository.IMedicalAppointmentRepository;
-import com.prueba.consultorioMedico.repository.IPatientRepository;
-import com.prueba.consultorioMedico.repository.IProfessionalRepository;
+import com.prueba.consultorioMedico.repository.*;
 import com.prueba.consultorioMedico.service.IMedicalAppointmentService;
 import com.prueba.consultorioMedico.util.DateValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +28,26 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     @Autowired
     private IPatientRepository patientRepository;
 
+    @Autowired
+    private ISpecialityRepository specialityRepository;
+
     @Override
-    public List<FullMedicalAppointmentDto> findAllByPatient(Patient patient) {
+    public List<FullMedicalAppointmentDto> findAllByPatient(String patientDni) {
+        Patient patient = patientRepository.findById(patientDni).orElseThrow();
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByPatient(patient);
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<FullMedicalAppointmentDto> findAllByProfessional(Professional professional) {
+    public List<FullMedicalAppointmentDto> findAllByProfessional(String professionalDni) {
+        Professional professional = professionalRepository.findById(professionalDni).orElseThrow();
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByProfessional(professional);
         return formatData(medicalAppointmentList);
     }
 
     @Override
-    public List<FullMedicalAppointmentDto> findAllBySpeciality(Speciality speciality) {
+    public List<FullMedicalAppointmentDto> findAllBySpeciality(String specialityName) {
+        Speciality speciality = specialityRepository.findById(specialityName).orElseThrow();
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllBySpeciality(speciality);
         return formatData(medicalAppointmentList);
     }
@@ -96,6 +100,7 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
         medicalAppointmentRepository.save(medicalAppointment);
     }
 
+
     //Aux
     public List<FullMedicalAppointmentDto> formatData(List<MedicalAppointment> medicalAppointmentList){
         List<FullMedicalAppointmentDto> medicalAppointmentDtoList = new ArrayList<>();
@@ -114,5 +119,24 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
             medicalAppointmentDtoList.add(dto);
         }));
         return medicalAppointmentDtoList;
+    }
+
+    //Aux
+    @Override
+    public void add(SimpleMedicalAppointmentDto simpleMedicalAppointmentDto) {
+        Professional professional = professionalRepository.findById(simpleMedicalAppointmentDto.getProfessionalDni())
+                .orElseThrow();
+        Patient patient = patientRepository.findById(simpleMedicalAppointmentDto.getPatientDni())
+                .orElseThrow();
+
+        FullMedicalAppointmentDto fullMedicalAppointmentDto = FullMedicalAppointmentDto.builder()
+                .professionalDni(professional.getDni()).professionalName(professional.getName())
+                .professionalLastname(professional.getLastname())
+                .patientDni(patient.getDni()).patientName(patient.getName())
+                .patientLastname(patient.getLastname())
+                .consultingRoomName(simpleMedicalAppointmentDto.getConsultingRoomName())
+                .date(simpleMedicalAppointmentDto.getDate()).build();
+        //Una vez ya formateado llamo al otro metodo add de este servicio, donde ahi se guardara la cita
+        this.add(fullMedicalAppointmentDto);
     }
 }
