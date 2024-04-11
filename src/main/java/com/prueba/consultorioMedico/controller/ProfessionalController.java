@@ -35,4 +35,13 @@ public class ProfessionalController {
         Message message = Message.builder().status(HttpStatus.OK).message("Profesional guardado correctamente").build();
         return ResponseEntity.ok(message);
     }
+
+    @PostMapping("{professionalDni}/add/speciality/{specialityName}")
+    public ResponseEntity<Message> addSpeciality(@PathVariable String professionalDni,
+                                                @PathVariable String specialityName){
+        professionalService.addSpeciality(professionalDni,specialityName);
+        Message message = Message.builder().status(HttpStatus.OK).message("La especialidad: "+specialityName+
+                " se agrego correctamente al profesional con dni: "+professionalDni).build();
+        return ResponseEntity.ok(message);
+    }
 }
