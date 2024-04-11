@@ -25,10 +25,8 @@ public class ProfessionalService implements IProfessionalService {
 
     @Override
     public void add(Professional professional) {
-        if(professional.getMedicalAppointments() == null)
-            professional.setMedicalAppointments(new ArrayList<MedicalAppointment>());
-        if(professional.getSpecialityList() == null)
-            professional.setSpecialityList(new ArrayList<Speciality>());
+        professional.setMedicalAppointments(new ArrayList<MedicalAppointment>());
+        professional.setSpecialityList(new ArrayList<Speciality>());
         professionalRepository.save(professional);
     }
 }
