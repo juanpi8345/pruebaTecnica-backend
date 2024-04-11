@@ -1,4 +1,6 @@
 package com.prueba.consultorioMedico.service;
 
-public interface IProfessionalService {
+import com.prueba.consultorioMedico.model.Professional;
+
+public interface IProfessionalService extends IGenericService<Professional> {
 }

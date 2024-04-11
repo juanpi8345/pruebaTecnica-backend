@@ -5,10 +5,12 @@ import com.prueba.consultorioMedico.model.Speciality;
 import com.prueba.consultorioMedico.repository.ISpecialityRepository;
 import com.prueba.consultorioMedico.service.ISpecialityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class SpecialityService implements ISpecialityService {
 
     @Autowired
