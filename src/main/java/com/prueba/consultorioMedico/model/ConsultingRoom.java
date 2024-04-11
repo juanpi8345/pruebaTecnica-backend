@@ -13,8 +13,5 @@ import lombok.Setter;
 @Table(name="consulting_rooms")
 public class ConsultingRoom {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "consulting_room_id")
-    private Long consultingRoomId;
-    private String name;
+    private String consultingRoomName;
 }

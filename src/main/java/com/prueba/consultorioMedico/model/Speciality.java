@@ -16,9 +16,7 @@ import java.util.List;
 @Table(name="specialities")
 public class Speciality {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "speciality_id")
-    private Long specialityId;
+    @Column(name = "speciality_name")
     private String name;
     @ManyToMany(mappedBy = "specialityList")
     private List<Professional> professionalList = new ArrayList<>();

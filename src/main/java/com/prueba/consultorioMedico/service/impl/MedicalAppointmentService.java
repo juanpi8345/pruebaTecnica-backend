@@ -9,6 +9,7 @@ import com.prueba.consultorioMedico.service.IMedicalAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,5 +36,20 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     @Override
     public List<MedicalAppointment> findAll() {
         return medicalRepository.findAll();
+    }
+
+    @Override
+    public void addAppointment(String patientDni, String professionalDni, String consultingRoomName, LocalDateTime date) {
+
+    }
+
+    @Override
+    public void deleteAppointment(Long appointmentId) {
+
+    }
+
+    @Override
+    public void updateAppointment(Long appointmentId, String patientDni, String professionalDni, String consultingRoomName, LocalDateTime date) {
+
     }
 }

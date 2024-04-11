@@ -1,10 +1,7 @@
 package com.prueba.consultorioMedico.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name="medical_appointments")
 public class MedicalAppointment {
     @Id
@@ -20,13 +18,13 @@ public class MedicalAppointment {
     @Column(name = "medical_appointment_id")
     private Long medicalAppointmentId;
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_dni")
     private Patient patient;
     @ManyToOne
-    @JoinColumn(name = "professional_id")
+    @JoinColumn(name = "professional_dni")
     private Professional professional;
     @ManyToOne
-    @JoinColumn(name = "consulting_room_id")
+    @JoinColumn(name = "consultingRoomName")
     private ConsultingRoom consultingRoom;
     private LocalDateTime appointmentDate;
 }

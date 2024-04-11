@@ -25,7 +25,7 @@ public class Professional {
     @JoinTable(
             name = "professional_specialities",
             joinColumns = @JoinColumn(name="professional_dni"),
-            inverseJoinColumns = @JoinColumn(name="speciality_id")
+            inverseJoinColumns = @JoinColumn(name="speciality_name")
     )
     private List<Speciality> specialityList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "professional")
