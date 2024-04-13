@@ -23,7 +23,6 @@ public class SpecialityService implements ISpecialityService {
 
     @Override
     public void add(Speciality speciality) {
-        speciality.setProfessionalList(new ArrayList<Professional>());
         specialityRepository.save(speciality);
     }
 }

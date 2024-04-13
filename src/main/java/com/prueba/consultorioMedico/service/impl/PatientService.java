@@ -23,7 +23,6 @@ public class PatientService implements IPatientService {
 
     @Override
     public void add(Patient patient) {
-        patient.setMedicalAppointments(new ArrayList<MedicalAppointment>());
         patientRepository.save(patient);
     }
 }

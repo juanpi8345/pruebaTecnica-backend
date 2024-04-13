@@ -107,6 +107,7 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
 
         medicalAppointmentList.forEach((medicalAppointment -> {
             FullMedicalAppointmentDto dto = FullMedicalAppointmentDto.builder()
+                    .medicalAppointmentId(medicalAppointment.getMedicalAppointmentId())
                     .professionalDni(medicalAppointment.getProfessional().getDni())
                     .professionalName(medicalAppointment.getProfessional().getName())
                     .professionalLastname(medicalAppointment.getProfessional().getLastname())

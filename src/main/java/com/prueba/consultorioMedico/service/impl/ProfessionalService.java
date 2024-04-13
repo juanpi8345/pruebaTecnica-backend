@@ -29,8 +29,6 @@ import java.util.List;
 
     @Override
     public void add(Professional professional) {
-        professional.setMedicalAppointments(new ArrayList<MedicalAppointment>());
-        professional.setSpecialityList(new ArrayList<Speciality>());
         professionalRepository.save(professional);
     }
 

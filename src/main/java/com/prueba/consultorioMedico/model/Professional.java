@@ -1,11 +1,14 @@
 package com.prueba.consultorioMedico.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -19,15 +22,18 @@ public class Professional {
     private String dni;
     private String name;
     private String lastname;
+    // Lista de profesionales con sus correspondientes especialidades y horarios.
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(
             name = "professional_specialities",
             joinColumns = @JoinColumn(name="professional_dni"),
             inverseJoinColumns = @JoinColumn(name="speciality_name")
     )
-    private List<Speciality> specialityList = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "professional")
-    private List<MedicalAppointment> medicalAppointments;
+    private Set<Speciality> specialityList = new HashSet<>();
+    //Para evitar bucles
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "professional",fetch = FetchType.LAZY)
+    private Set<MedicalAppointment> medicalAppointments = new HashSet<>();
     private LocalTime start;
     private LocalTime end;
 
