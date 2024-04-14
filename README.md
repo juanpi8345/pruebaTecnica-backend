@@ -6,6 +6,6 @@
 
 3- Levantar la aplicacion, hibernate se encargara de la creacion de tablas y sus relaciones.
 
-4- Como opcional deje un script llamado "datos" el cual carga profesionales, especialidades, edilicios y pacientes, asi no se realiza toda la carga desde el sistema.
+4- Como opcional deje un script llamado "data" el cual carga profesionales, especialidades, edilicios y pacientes, asi no se realiza toda la carga desde el sistema.
 
 5- Levantar la interfaz grafica en angular: https://github.com/juanpi8345/pruebaTecnica-frontend
