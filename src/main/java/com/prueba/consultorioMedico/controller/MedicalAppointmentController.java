@@ -24,6 +24,14 @@ public class MedicalAppointmentController {
         return ResponseEntity.ok(medicalAppointmentService.findAll());
     }
 
+    /*Este metodo lo voy a usar para cuando el front vaya a la pagina de actualizacion
+      Poder obtener los datos y autocompletar el formulario, por eso es que retorno
+      el dto simple. */
+    @GetMapping("/get/{appointmentId}")
+    public ResponseEntity<SimpleMedicalAppointmentDto> findById(@PathVariable Long appointmentId){
+        return ResponseEntity.ok(medicalAppointmentService.findById(appointmentId));
+    }
+
     @GetMapping("/get/patient/{patientDni}")
     public ResponseEntity<List<FullMedicalAppointmentDto>> findByPatient(@PathVariable String patientDni){
         return ResponseEntity.ok(medicalAppointmentService.findAllByPatient(patientDni));
@@ -43,6 +51,14 @@ public class MedicalAppointmentController {
     public ResponseEntity<Message> addAppointment(@RequestBody SimpleMedicalAppointmentDto simpleMedicalAppointmentDto){
         medicalAppointmentService.add(simpleMedicalAppointmentDto);
         Message message = Message.builder().status(HttpStatus.OK).message("Cita guardada correctamente").build();
+        return ResponseEntity.ok(message);
+    }
+
+    @PutMapping("/update/{medicalAppointmentId}")
+    public ResponseEntity<Message> updateAppointment(@PathVariable Long medicalAppointmentId,
+                                                     @RequestBody SimpleMedicalAppointmentDto simpleMedicalAppointmentDto){
+        medicalAppointmentService.updateAppointment(medicalAppointmentId,simpleMedicalAppointmentDto);
+        Message message = Message.builder().status(HttpStatus.OK).message("Cita modificada correctamente").build();
         return ResponseEntity.ok(message);
     }
 

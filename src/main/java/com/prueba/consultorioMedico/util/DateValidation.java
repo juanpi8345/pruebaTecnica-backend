@@ -24,7 +24,7 @@ public class DateValidation {
                                                 LocalTime professionalStartTime,
                                                 LocalTime professionalEndTime) throws OutOfServiceException{
         if(appointmentTime.isBefore( professionalStartTime) || appointmentTime.isAfter(professionalEndTime))
-            throw new OutOfServiceException("Error, el profesional no esta disponible a las "+ appointmentTime+ "hs");
+            throw new OutOfTimeException("Error, el profesional no esta disponible a las "+ appointmentTime+ "hs");
     }
 
     public static void validateAbleToModifyOrDelete(LocalDateTime appointmentTime) throws OutOfTimeException{

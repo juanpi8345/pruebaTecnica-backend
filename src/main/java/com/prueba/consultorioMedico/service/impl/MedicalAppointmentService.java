@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-            public class MedicalAppointmentService implements IMedicalAppointmentService {
+public class MedicalAppointmentService implements IMedicalAppointmentService {
 
     @Autowired
     private IMedicalAppointmentRepository medicalAppointmentRepository;
@@ -30,6 +30,23 @@ import java.util.List;
 
     @Autowired
     private ISpecialityRepository specialityRepository;
+
+    @Override
+    public SimpleMedicalAppointmentDto findById(Long medicalAppointmentId) {
+        MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(medicalAppointmentId).orElseThrow();
+        //Obtengo las entidades
+        Professional professional = professionalRepository.findById(medicalAppointment.getProfessional().getDni()).orElseThrow();
+        Speciality speciality = specialityRepository.findById(medicalAppointment.getSpeciality().getName()).orElseThrow();
+        Patient patient = patientRepository.findById(medicalAppointment.getPatient().getDni()).orElseThrow();
+        ConsultingRoom consultingRoom = consultingRoomRepository.findById(medicalAppointment.getConsultingRoom().getConsultingRoomName()).orElseThrow();
+        //Preparo la respuesta y retorno
+        return SimpleMedicalAppointmentDto.builder()
+                .professionalDni(professional.getDni())
+                .specialityName(speciality.getName())
+                .patientDni(patient.getDni())
+                .consultingRoomName(consultingRoom.getConsultingRoomName())
+                .date(medicalAppointment.getAppointmentDate()).build();
+    }
 
     @Override
     public List<FullMedicalAppointmentDto> findAllByPatient(String patientDni) {
@@ -90,14 +107,39 @@ import java.util.List;
     }
 
     @Override
-    public void updateAppointment(Long appointmentId,LocalDateTime newDate) {
+    public void updateAppointment(Long appointmentId, SimpleMedicalAppointmentDto simpleMedicalAppointmentDto) {
         MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(appointmentId).orElseThrow();
         //Verificar si el turno se puede modificar
-        DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
-        medicalAppointment.setAppointmentDate(newDate);
+        DateValidation.validateAbleToModifyOrDelete(simpleMedicalAppointmentDto.getDate());
+        //Verificar que el nuevo turno cumpla con las restricciones
+        DateValidation.validateAppointmentTime(simpleMedicalAppointmentDto.getDate().toLocalTime());
+        DateValidation.validateDayOfWeek(simpleMedicalAppointmentDto.getDate());
+        //Verificar que las entidades existan
+        Professional professional = professionalRepository.findById(simpleMedicalAppointmentDto.getProfessionalDni()).orElseThrow();
+        //Verificar que el profesional pueda atender el nuevo turno
+        DateValidation.validateProfessionalTime(simpleMedicalAppointmentDto.getDate().toLocalTime(),professional.getStart(),
+                professional.getEnd());
+        Speciality speciality = specialityRepository.findById(simpleMedicalAppointmentDto.getSpecialityName()).orElseThrow();
+        Patient patient = patientRepository.findById(simpleMedicalAppointmentDto.getPatientDni()).orElseThrow();
+        ConsultingRoom consultingRoom = consultingRoomRepository.findById(simpleMedicalAppointmentDto.getConsultingRoomName()).orElseThrow();
+
+        //Seteo el id asi se remplaza
+        medicalAppointment.setMedicalAppointmentId(appointmentId);
+        medicalAppointment.setPatient(patient);
+        medicalAppointment.setProfessional(professional);
+        medicalAppointment.setSpeciality(speciality);
+        medicalAppointment.setConsultingRoom(consultingRoom);
+        medicalAppointment.setAppointmentDate(simpleMedicalAppointmentDto.getDate());
         medicalAppointmentRepository.save(medicalAppointment);
     }
 
+    @Override
+    public void cancel(Long medicalAppointmentId) {
+        //Para comprobar que exista
+        MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(medicalAppointmentId).orElseThrow();
+        DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
+        medicalAppointmentRepository.deleteById(medicalAppointmentId);
+    }
 
     //Aux
     public List<FullMedicalAppointmentDto> formatData(List<MedicalAppointment> medicalAppointmentList){
@@ -141,11 +183,4 @@ import java.util.List;
         this.add(fullMedicalAppointmentDto);
     }
 
-    @Override
-    public void cancel(Long medicalAppointmentId) {
-        //Para comprobar que exista
-        MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(medicalAppointmentId).orElseThrow();
-        DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
-        medicalAppointmentRepository.deleteById(medicalAppointmentId);
-    }
 }

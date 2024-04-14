@@ -14,9 +14,10 @@ public interface IMedicalAppointmentService extends IGenericService<FullMedicalA
     List<FullMedicalAppointmentDto> findAllByProfessional(String professionalDni);
     List<FullMedicalAppointmentDto> findAllBySpeciality(String specialityName);
     void deleteAppointment(Long appointmentId);
-    void updateAppointment(Long appointmentId, LocalDateTime newDate);
+    void updateAppointment(Long appointmentId, SimpleMedicalAppointmentDto simpleMedicalAppointmentDto);
     //Sobre cargo el metodo para poder agregar de manera mas sencilla
     void add(SimpleMedicalAppointmentDto simpleMedicalAppointmentDto);
     void cancel(Long medicalAppointmentId);
+    SimpleMedicalAppointmentDto findById(Long medicalAppointmentId);
 
 }
