@@ -1,4 +1,5 @@
 Instrucciones:
+
 1- Crear la bd con el script "DB".
 2- Ir a src/main/resources/application.properties y cambiar las configuraciones de username y password.
 3- Levantar la aplicacion, hibernate se encargara de la creacion de tablas y sus relaciones.
