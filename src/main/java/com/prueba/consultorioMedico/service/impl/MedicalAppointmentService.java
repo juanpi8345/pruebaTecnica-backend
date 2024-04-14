@@ -52,27 +52,27 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     public List<FullMedicalAppointmentDto> findAllByPatient(String patientDni) {
         Patient patient = patientRepository.findById(patientDni).orElseThrow();
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByPatient(patient);
-        return formatData(medicalAppointmentList);
+        return this.formatData(medicalAppointmentList);
     }
 
     @Override
     public List<FullMedicalAppointmentDto> findAllByProfessional(String professionalDni) {
         Professional professional = professionalRepository.findById(professionalDni).orElseThrow();
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByProfessional(professional);
-        return formatData(medicalAppointmentList);
+        return this.formatData(medicalAppointmentList);
     }
 
     @Override
     public List<FullMedicalAppointmentDto> findAllBySpeciality(String specialityName) {
         Speciality speciality = specialityRepository.findById(specialityName).orElseThrow();
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllBySpeciality(speciality);
-        return formatData(medicalAppointmentList);
+        return this.formatData(medicalAppointmentList);
     }
 
     @Override
     public List<FullMedicalAppointmentDto> findAll() {
         List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAll();
-        return formatData(medicalAppointmentList);
+        return this.formatData(medicalAppointmentList);
     }
 
     @Override
@@ -86,10 +86,12 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
         DateValidation.validateProfessionalTime(medicalAppointmentDto.getDate().toLocalTime(),
                                                 professional.getStart(), professional.getEnd());
 
+        //Verifico que las entidades existan
         Patient patient = patientRepository.findById(medicalAppointmentDto.getPatientDni()).orElseThrow();
         ConsultingRoom consultingRoom = consultingRoomRepository.findById(medicalAppointmentDto.getConsultingRoomName()).orElseThrow();
         Speciality speciality = specialityRepository.findById(medicalAppointmentDto.getSpecialityName()).orElseThrow();
 
+        //Armo el objeto que se guardara en la bd
         MedicalAppointment medicalAppointment = MedicalAppointment.builder()
                 .appointmentDate(medicalAppointmentDto.getDate())
                 .patient(patient).professional(professional).consultingRoom(consultingRoom).
@@ -137,11 +139,16 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     public void cancel(Long medicalAppointmentId) {
         //Para comprobar que exista
         MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(medicalAppointmentId).orElseThrow();
+        //Verifico si se puede eliminar
         DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
         medicalAppointmentRepository.deleteById(medicalAppointmentId);
     }
 
     //Aux
+    //Lo que hago en este metodo es formatear la informacion de la lista de turnos
+    //La diferencia es que en la lista de turnos normal tiene objetos como profesionales, pacientes, especialidades
+    //Para hacerlo mas simple itero cada turno, desarmo sus objetos y lo guardo en la lista de dtos.
+    //Al terminar retorno la lista con todos los dto
     public List<FullMedicalAppointmentDto> formatData(List<MedicalAppointment> medicalAppointmentList){
         List<FullMedicalAppointmentDto> medicalAppointmentDtoList = new ArrayList<>();
 
@@ -164,6 +171,9 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     }
 
     //Aux
+    //Hago este metodo porque le metodo generico me pide un fullDto
+    //Para el usuario seria tedioso llenar toda esa informacion
+    //Lo que hago en este metodo es construir el dto full y llamar al otro metodo add
     @Override
     public void add(SimpleMedicalAppointmentDto simpleMedicalAppointmentDto) {
         Professional professional = professionalRepository.findById(simpleMedicalAppointmentDto.getProfessionalDni())
