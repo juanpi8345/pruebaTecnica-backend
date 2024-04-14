@@ -17,5 +17,6 @@ public interface IMedicalAppointmentService extends IGenericService<FullMedicalA
     void updateAppointment(Long appointmentId, LocalDateTime newDate);
     //Sobre cargo el metodo para poder agregar de manera mas sencilla
     void add(SimpleMedicalAppointmentDto simpleMedicalAppointmentDto);
+    void cancel(Long medicalAppointmentId);
 
 }

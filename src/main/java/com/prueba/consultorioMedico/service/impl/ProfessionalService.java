@@ -41,4 +41,5 @@ import java.util.List;
         professionalRepository.save(professional);
         specialityRepository.save(speciality);
     }
+
 }

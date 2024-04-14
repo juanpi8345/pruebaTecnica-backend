@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 //Dto con el objetivo de mostrar informacion
 public class FullMedicalAppointmentDto {
     Long medicalAppointmentId;
+    String specialityName;
     String professionalDni;
     String professionalName;
     String professionalLastname;

@@ -17,6 +17,9 @@ public class MedicalAppointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "medical_appointment_id")
     private Long medicalAppointmentId;
+    @ManyToOne()
+    @JoinColumn(name = "speciality_name")
+    private Speciality speciality;
     @ManyToOne
     @JoinColumn(name = "patient_dni")
     private Patient patient;

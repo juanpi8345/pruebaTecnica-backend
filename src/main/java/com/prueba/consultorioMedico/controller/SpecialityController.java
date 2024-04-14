@@ -27,6 +27,11 @@ public class SpecialityController {
         return ResponseEntity.ok(specialityService.findAll());
     }
 
+    @GetMapping("/get/professional/{professionalDni}")
+    public ResponseEntity<List<Speciality>> findAllByProfessional(@PathVariable String professionalDni){
+        return ResponseEntity.ok(specialityService.findSpecialitiesByProfessional(professionalDni));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Message> addProfessional(@RequestBody SpecialityDto specialityDto){
         Speciality speciality = Speciality.builder().name(specialityDto.getName()).build();

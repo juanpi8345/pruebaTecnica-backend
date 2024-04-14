@@ -20,8 +20,4 @@ public class Patient {
     private String dni;
     private String name;
     private String lastname;
-    //Evitar bucle //Considerar borrarlo
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient", fetch = FetchType.LAZY)
-    private Set<MedicalAppointment> medicalAppointments = new HashSet<>();
 }

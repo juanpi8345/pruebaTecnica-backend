@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MedicalAppointmentService implements IMedicalAppointmentService {
+            public class MedicalAppointmentService implements IMedicalAppointmentService {
 
     @Autowired
     private IMedicalAppointmentRepository medicalAppointmentRepository;
@@ -71,15 +71,13 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
 
         Patient patient = patientRepository.findById(medicalAppointmentDto.getPatientDni()).orElseThrow();
         ConsultingRoom consultingRoom = consultingRoomRepository.findById(medicalAppointmentDto.getConsultingRoomName()).orElseThrow();
+        Speciality speciality = specialityRepository.findById(medicalAppointmentDto.getSpecialityName()).orElseThrow();
 
         MedicalAppointment medicalAppointment = MedicalAppointment.builder()
                 .appointmentDate(medicalAppointmentDto.getDate())
-                .patient(patient).professional(professional).consultingRoom(consultingRoom).build();
+                .patient(patient).professional(professional).consultingRoom(consultingRoom).
+                speciality(speciality).build();
 
-        patient.getMedicalAppointments().add(medicalAppointment);
-        patientRepository.save(patient);
-        professional.getMedicalAppointments().add(medicalAppointment);
-        professionalRepository.save(professional);
         medicalAppointmentRepository.save(medicalAppointment);
     }
 
@@ -114,6 +112,7 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
                     .patientDni(medicalAppointment.getPatient().getDni())
                     .patientName(medicalAppointment.getPatient().getName())
                     .patientLastname(medicalAppointment.getPatient().getLastname())
+                    .specialityName(medicalAppointment.getSpeciality().getName())
                     .consultingRoomName(medicalAppointment.getConsultingRoom().getConsultingRoomName())
                     .date(medicalAppointment.getAppointmentDate())
                     .build();
@@ -136,8 +135,17 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
                 .patientDni(patient.getDni()).patientName(patient.getName())
                 .patientLastname(patient.getLastname())
                 .consultingRoomName(simpleMedicalAppointmentDto.getConsultingRoomName())
+                .specialityName(simpleMedicalAppointmentDto.getSpecialityName())
                 .date(simpleMedicalAppointmentDto.getDate()).build();
         //Una vez ya formateado llamo al otro metodo add de este servicio, donde ahi se guardara la cita
         this.add(fullMedicalAppointmentDto);
+    }
+
+    @Override
+    public void cancel(Long medicalAppointmentId) {
+        //Para comprobar que exista
+        MedicalAppointment medicalAppointment = medicalAppointmentRepository.findById(medicalAppointmentId).orElseThrow();
+        DateValidation.validateAbleToModifyOrDelete(medicalAppointment.getAppointmentDate());
+        medicalAppointmentRepository.deleteById(medicalAppointmentId);
     }
 }

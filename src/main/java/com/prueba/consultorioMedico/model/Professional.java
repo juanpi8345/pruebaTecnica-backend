@@ -30,10 +30,6 @@ public class Professional {
             inverseJoinColumns = @JoinColumn(name="speciality_name")
     )
     private Set<Speciality> specialityList = new HashSet<>();
-    //Para evitar bucles
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "professional",fetch = FetchType.LAZY)
-    private Set<MedicalAppointment> medicalAppointments = new HashSet<>();
     private LocalTime start;
     private LocalTime end;
 

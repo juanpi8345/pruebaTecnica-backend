@@ -2,9 +2,7 @@ package com.prueba.consultorioMedico.controller;
 
 import com.prueba.consultorioMedico.dto.FullMedicalAppointmentDto;
 import com.prueba.consultorioMedico.dto.Message;
-import com.prueba.consultorioMedico.dto.PatientDto;
 import com.prueba.consultorioMedico.dto.SimpleMedicalAppointmentDto;
-import com.prueba.consultorioMedico.model.Patient;
 import com.prueba.consultorioMedico.service.IMedicalAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,14 +24,14 @@ public class MedicalAppointmentController {
         return ResponseEntity.ok(medicalAppointmentService.findAll());
     }
 
-    @GetMapping("/get/patient/{patientName}")
-    public ResponseEntity<List<FullMedicalAppointmentDto>> findByPatient(@PathVariable String patientName){
-        return ResponseEntity.ok(medicalAppointmentService.findAllByPatient(patientName));
+    @GetMapping("/get/patient/{patientDni}")
+    public ResponseEntity<List<FullMedicalAppointmentDto>> findByPatient(@PathVariable String patientDni){
+        return ResponseEntity.ok(medicalAppointmentService.findAllByPatient(patientDni));
     }
 
-    @GetMapping("/get/professional/{professionalName}")
-    public ResponseEntity<List<FullMedicalAppointmentDto>> findByProfessional(@PathVariable String professionalName){
-        return ResponseEntity.ok(medicalAppointmentService.findAllByProfessional(professionalName));
+    @GetMapping("/get/professional/{professionalDni}")
+    public ResponseEntity<List<FullMedicalAppointmentDto>> findByProfessional(@PathVariable String professionalDni){
+        return ResponseEntity.ok(medicalAppointmentService.findAllByProfessional(professionalDni));
     }
 
     @GetMapping("/get/speciality/{specialityName}")
@@ -45,6 +43,13 @@ public class MedicalAppointmentController {
     public ResponseEntity<Message> addAppointment(@RequestBody SimpleMedicalAppointmentDto simpleMedicalAppointmentDto){
         medicalAppointmentService.add(simpleMedicalAppointmentDto);
         Message message = Message.builder().status(HttpStatus.OK).message("Cita guardada correctamente").build();
+        return ResponseEntity.ok(message);
+    }
+
+    @DeleteMapping("/delete/{medicalAppointmentId}")
+    public ResponseEntity<Message> deleteAppointment(@PathVariable Long medicalAppointmentId){
+        medicalAppointmentService.deleteAppointment(medicalAppointmentId);
+        Message message = Message.builder().status(HttpStatus.OK).message("Cita eliminada correctamente").build();
         return ResponseEntity.ok(message);
     }
 

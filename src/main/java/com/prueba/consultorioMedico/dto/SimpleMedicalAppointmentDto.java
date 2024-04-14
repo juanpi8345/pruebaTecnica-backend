@@ -13,5 +13,6 @@ public class SimpleMedicalAppointmentDto {
     String professionalDni;
     String patientDni;
     String consultingRoomName;
+    String specialityName;
     LocalDateTime date;
 }

@@ -15,6 +15,7 @@ import java.util.List;
 public interface IMedicalAppointmentRepository extends JpaRepository<MedicalAppointment,Long> {
     List<MedicalAppointment> findAllByPatient(Patient patient);
     List<MedicalAppointment> findAllByProfessional(Professional professional);
-    @Query("SELECT ma FROM MedicalAppointment ma WHERE :speciality MEMBER OF ma.professional.specialityList")
-    List<MedicalAppointment> findAllBySpeciality(@Param("speciality") Speciality speciality);
+    /*@Query("SELECT ma FROM MedicalAppointment ma WHERE :speciality MEMBER OF ma.professional.specialityList")
+    List<MedicalAppointment> findAllBySpeciality(@Param("speciality") Speciality speciality);*/
+    List<MedicalAppointment> findAllBySpeciality(Speciality speciality);
 }
