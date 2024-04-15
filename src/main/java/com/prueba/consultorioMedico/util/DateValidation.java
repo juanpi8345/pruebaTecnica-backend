@@ -2,6 +2,8 @@ package com.prueba.consultorioMedico.util;
 
 import com.prueba.consultorioMedico.exception.OutOfServiceException;
 import com.prueba.consultorioMedico.exception.OutOfTimeException;
+import com.prueba.consultorioMedico.exception.TimeException;
+import org.springframework.cglib.core.Local;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,8 +19,20 @@ public class DateValidation {
 
     public static void validateAppointmentTime(LocalTime date) throws OutOfServiceException{
         if(date.isBefore(LocalTime.of(8,0)) || date.isAfter(LocalTime.of(23,0)))
-            throw new OutOfServiceException("Error, la clinica atienda de 8hs a 23hs");
+            throw new OutOfServiceException("Error, la clinica atiende de 8hs a 23hs");
     }
+
+    //Que los horarios del prfoesional coincidan con el horario de servicio de la clinica
+    public static void validateProfessionalTimeOnService(LocalTime start,LocalTime end) throws OutOfServiceException{
+        if(start.isBefore(LocalTime.of(8,0)) || end.isAfter(LocalTime.of(23,0)))
+            throw new OutOfServiceException("Error, la clinica atiende de 8hs a 23hs");
+    }
+
+    public static void validateTime(LocalTime start,LocalTime end) throws TimeException {
+        if(start.isAfter(end))
+            throw new TimeException("Error, horas invalidas");
+    }
+
 
     public static void validateProfessionalTime(LocalTime appointmentTime,
                                                 LocalTime professionalStartTime,

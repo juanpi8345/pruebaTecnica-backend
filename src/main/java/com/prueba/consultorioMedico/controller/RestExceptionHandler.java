@@ -3,6 +3,7 @@ package com.prueba.consultorioMedico.controller;
 import com.prueba.consultorioMedico.dto.Message;
 import com.prueba.consultorioMedico.exception.OutOfServiceException;
 import com.prueba.consultorioMedico.exception.OutOfTimeException;
+import com.prueba.consultorioMedico.exception.TimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,6 +27,15 @@ public class RestExceptionHandler {
     @ExceptionHandler(OutOfTimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Message> outOfTime(OutOfTimeException e){
+        Message err = new Message(HttpStatus.BAD_REQUEST,e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    //Si ingresan un horario invalido
+    //Por ejemplo un horario de un profesional que empieza a las 15:00hs y termina a las 9:00
+    @ExceptionHandler(TimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Message> invalidTime(TimeException e){
         Message err = new Message(HttpStatus.BAD_REQUEST,e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
