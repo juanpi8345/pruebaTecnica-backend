@@ -16,6 +16,7 @@ import java.util.List;
 //Recomendable poner la url del cliente frontend
 @CrossOrigin("*")
 public class MedicalAppointmentController {
+
     @Autowired
     private IMedicalAppointmentService medicalAppointmentService;
 

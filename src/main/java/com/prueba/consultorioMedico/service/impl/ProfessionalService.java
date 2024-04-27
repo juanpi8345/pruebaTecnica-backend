@@ -1,17 +1,14 @@
 package com.prueba.consultorioMedico.service.impl;
 
-import com.prueba.consultorioMedico.model.MedicalAppointment;
 import com.prueba.consultorioMedico.model.Professional;
 import com.prueba.consultorioMedico.model.Speciality;
 import com.prueba.consultorioMedico.repository.IProfessionalRepository;
 import com.prueba.consultorioMedico.repository.ISpecialityRepository;
 import com.prueba.consultorioMedico.service.IProfessionalService;
 import com.prueba.consultorioMedico.util.DateValidation;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,9 +28,9 @@ import java.util.List;
     @Override
     public void add(Professional professional) {
         //Si el tiempo del profesional esta dentro del tiempo de servicio
-        DateValidation.validateProfessionalTimeOnService(professional.getStart(),professional.getEnd());
+        DateValidation.validateProfessionalTimeOnService(professional.getStart(),professional.getFinish());
         //Si los tiempos del profesional son validos, o sea que el inicio no es despues del fin.
-        DateValidation.validateTime(professional.getStart(),professional.getEnd());
+        DateValidation.validateTime(professional.getStart(),professional.getFinish());
         professionalRepository.save(professional);
     }
 

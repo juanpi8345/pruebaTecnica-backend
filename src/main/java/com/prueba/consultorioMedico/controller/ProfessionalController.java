@@ -2,7 +2,6 @@ package com.prueba.consultorioMedico.controller;
 
 import com.prueba.consultorioMedico.dto.Message;
 import com.prueba.consultorioMedico.dto.ProfessionalDto;
-import com.prueba.consultorioMedico.model.ConsultingRoom;
 import com.prueba.consultorioMedico.model.Professional;
 import com.prueba.consultorioMedico.service.IProfessionalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class ProfessionalController {
     public ResponseEntity<Message> addProfessional(@RequestBody ProfessionalDto professionalDto){
         Professional professional = Professional.builder().name(professionalDto.getName())
                         .lastname(professionalDto.getLastname()).dni(professionalDto.getDni())
-                        .start(professionalDto.getStart()).end(professionalDto.getEnd()).build();
+                        .start(professionalDto.getStart()).finish(professionalDto.getEnd()).build();
         professionalService.add(professional);
         Message message = Message.builder().status(HttpStatus.OK).message("Profesional guardado correctamente").build();
         return ResponseEntity.ok(message);

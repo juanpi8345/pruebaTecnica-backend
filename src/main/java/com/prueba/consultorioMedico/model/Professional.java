@@ -1,13 +1,10 @@
 package com.prueba.consultorioMedico.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,7 +27,9 @@ public class Professional {
             inverseJoinColumns = @JoinColumn(name="speciality_name")
     )
     private Set<Speciality> specialityList = new HashSet<>();
+    @Column
     private LocalTime start;
-    private LocalTime end;
+    @Column
+    private LocalTime finish;
 
 }

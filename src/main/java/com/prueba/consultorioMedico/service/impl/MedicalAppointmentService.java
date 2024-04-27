@@ -9,7 +9,6 @@ import com.prueba.consultorioMedico.util.DateValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
         Professional professional = professionalRepository.findById(medicalAppointmentDto.getProfessionalDni()).orElseThrow();
         //Verificar si el profesional esta disponible
         DateValidation.validateProfessionalTime(medicalAppointmentDto.getDate().toLocalTime(),
-                                                professional.getStart(), professional.getEnd());
+                                                professional.getStart(), professional.getFinish());
 
         //Verifico que las entidades existan
         Patient patient = patientRepository.findById(medicalAppointmentDto.getPatientDni()).orElseThrow();
@@ -120,7 +119,7 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
         Professional professional = professionalRepository.findById(simpleMedicalAppointmentDto.getProfessionalDni()).orElseThrow();
         //Verificar que el profesional pueda atender el nuevo turno
         DateValidation.validateProfessionalTime(simpleMedicalAppointmentDto.getDate().toLocalTime(),professional.getStart(),
-                professional.getEnd());
+                professional.getFinish());
         Speciality speciality = specialityRepository.findById(simpleMedicalAppointmentDto.getSpecialityName()).orElseThrow();
         Patient patient = patientRepository.findById(simpleMedicalAppointmentDto.getPatientDni()).orElseThrow();
         ConsultingRoom consultingRoom = consultingRoomRepository.findById(simpleMedicalAppointmentDto.getConsultingRoomName()).orElseThrow();
